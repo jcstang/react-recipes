@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import Jumbotron from "./components/Jumbotron";
 import Nav from "./components/Nav";
-import Input from "./components/Input";
-import Button from "./components/Button";
 import API from "./utils/API";
-import { RecipeList, RecipeListItem } from "./components/RecipeList";
-import { Container, Row, Col } from "./components/Grid";
+import { RecipeList } from "./components/RecipeList";
+import { RecipeSearch } from "./components/RecipeSearch";
+import { Container } from "./components/Grid";
 
 class App extends Component {
   state = {
@@ -27,7 +26,6 @@ class App extends Component {
     event.preventDefault();
     API.getRecipes(this.state.recipeSearch)
       .then(res => {
-        // data getting put in the console on the browser
         console.log(res.data);
         this.setState({ recipes: res.data });
       })
@@ -40,39 +38,13 @@ class App extends Component {
         <Nav />
         <Jumbotron />
         <Container>
-          <Row>
-            <Col size="md-12">
-              <form>
-                <Container>
-                  <Row>
-                    <Col size="xs-9 sm-10">
-                      <Input
-                        name="recipeSearch"
-                        value={this.state.recipeSearch}
-                        onChange={this.handleInputChange}
-                        placeholder="Search For a Recipe"
-                      />
-                    </Col>
-                    <Col size="xs-3 sm-2">
-                      <Button
-                        onClick={this.handleFormSubmit}
-                        type="success"
-                        className="input-lg"
-                      >
-                        Search
-                      </Button>
-                    </Col>
-                  </Row>
-                </Container>
-              </form>
-            </Col>
-          </Row>
-          <Row>
-            <Col size="xs-12">
-              <h1>Render Recipes Here</h1>
-              <RecipeList />
-            </Col>
-          </Row>
+          <RecipeSearch
+            state={this.state}
+            handleInputChange={this.handleInputChange}
+            handleFormSubmit={this.handleFormSubmit} />
+
+          <RecipeList recipes={this.state.recipes} />
+
         </Container>
       </div>
     );
